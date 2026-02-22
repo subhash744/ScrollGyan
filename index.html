@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ScrollGyan | Swipe Through Knowledge in 10 Indian Languages</title>
+    <meta name="description"
+        content="ScrollGyan: The minimal Wikipedia feed for India. Browse articles in Hindi, Telugu, Tamil, & more. No ads, no login, privacy-first.">
+    <meta name="keywords"
+        content="ScrollGyan, Wikipedia India, Knowledge App, Indian Languages, Hindi Wikipedia, Tamil Wikipedia, Telugu Wikipedia, Learning App India">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://scrollgyan.vercel.app/">
+    <meta property="og:title" content="ScrollGyan | Infinite scroll, but for knowledge.">
+    <meta property="og:description"
+        content="Browse Wikipedia articles in 10 Indian languages. Designed for a distraction-free learning experience.">
+    <meta property="og:image" content="https://scrollgyan.vercel.app/Medium%20-%2001%20-%20Frame%201.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://scrollgyan.vercel.app/">
+    <meta property="twitter:title" content="ScrollGyan | Knowledge at your fingertips">
+    <meta property="twitter:description" content="The minimal Wikipedia feed for India. 10 languages, zero ads.">
+    <meta property="twitter:image" content="https://scrollgyan.vercel.app/Medium%20-%2001%20-%20Frame%201.jpg">
+
+    <!-- Vercel Analytics -->
+    <script defer src="/_vercel/insights/script.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #000000;
+            --secondary-text: #555555;
+            --accent-color: #000000;
+            --grain-opacity: 0.05;
+            --border-light: #eeeeee;
+            --transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Grain Effect Overlay */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: var(--grain-opacity);
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        header {
+            padding: 2.5rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: -0.04em;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 400;
+            margin-left: 2rem;
+            font-size: 0.95rem;
+            opacity: 0.7;
+            transition: var(--transition);
+        }
+
+        nav a:hover {
+            opacity: 1;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 5rem 0 3rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 10vw, 6rem);
+            font-weight: 700;
+            line-height: 0.9;
+            letter-spacing: -0.05em;
+            margin-bottom: 2rem;
+        }
+
+        .hero p {
+            font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+            color: var(--secondary-text);
+            max-width: 750px;
+            margin: 0 auto 3.5rem;
+            font-weight: 300;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 1.2rem 2.8rem;
+            background-color: var(--text-color);
+            color: var(--bg-color);
+            text-decoration: none;
+            border-radius: 100px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: var(--transition);
+            border: 1px solid var(--text-color);
+        }
+
+        .cta-button:hover {
+            background-color: transparent;
+            color: var(--text-color);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        /* App Mockup Section */
+        .app-showcase {
+            padding: 4rem 0 8rem;
+            overflow: hidden;
+        }
+
+        .phone-carousel {
+            display: flex;
+            gap: 1.5rem;
+            padding: 2rem 0;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .phone-carousel::-webkit-scrollbar {
+            display: none;
+        }
+
+        .phone-frame {
+            flex: 0 0 260px;
+            aspect-ratio: 9/19;
+            background: #fbfbfb;
+            border-radius: 2.2rem;
+            overflow: hidden;
+            border: 6px solid #000;
+            box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.15);
+            transition: var(--transition);
+        }
+
+        .phone-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Languages Section */
+        .languages {
+            padding: 6rem 0;
+            border-top: 1px solid var(--border-light);
+            text-align: center;
+        }
+
+        .languages-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.8rem;
+            margin-top: 2.5rem;
+        }
+
+        .lang-tag {
+            padding: 0.6rem 1.4rem;
+            border: 1px solid #ddd;
+            border-radius: 50px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .lang-tag:hover {
+            background: #000;
+            color: #fff;
+            border-color: #000;
+        }
+
+        /* Features Section */
+        .grid-section {
+            padding: 8rem 0;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .section-header {
+            margin-bottom: 5rem;
+        }
+
+        .section-header span {
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            color: #888;
+        }
+
+        .section-header h2 {
+            font-size: 3rem;
+            font-weight: 700;
+            letter-spacing: -0.04em;
+            margin-top: 0.5rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 4rem;
+        }
+
+        .feature-item h3 {
+            font-size: 1.6rem;
+            margin-bottom: 1.2rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+        }
+
+        .feature-item p {
+            color: var(--secondary-text);
+            font-size: 1.1rem;
+            font-weight: 300;
+        }
+
+        /* Privacy Policy Overlay */
+        #privacy-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            z-index: 10000;
+            padding: 4rem 2rem;
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .close-modal {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            font-size: 2rem;
+            cursor: pointer;
+            font-weight: 300;
+        }
+
+        /* Footer */
+        footer {
+            padding: 10rem 0 4rem;
+            border-top: 1px solid var(--border-light);
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-size: 3rem;
+            font-weight: 700;
+            letter-spacing: -0.05em;
+            margin-bottom: 1rem;
+        }
+
+        .footer-desc {
+            max-width: 500px;
+            margin: 0 auto 4rem;
+            color: var(--secondary-text);
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-bottom: 4rem;
+        }
+
+        .footer-links a {
+            text-decoration: none;
+            color: #888;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: #000;
+        }
+
+        .copyright {
+            font-size: 0.8rem;
+            color: #aaa;
+        }
+
+        /* Animations */
+        @keyframes reveal {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate {
+            animation: reveal 1s forwards;
+            opacity: 0;
+        }
+
+        .delay-1 {
+            animation-delay: 0.1s;
+        }
+
+        .delay-2 {
+            animation-delay: 0.2s;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 3.5rem;
+            }
+
+            .section-header h2 {
+                font-size: 2.2rem;
+            }
+
+            .features-grid {
+                gap: 2.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">SCROLLGYAN</div>
+            <nav>
+                <a href="#how-it-works">How it works</a>
+                <a href="#features">Features</a>
+                <a href="javascript:void(0)" onclick="openPrivacy()">Privacy</a>
+            </nav>
+        </header>
+
+        <section class="hero">
+            <h1 class="animate">Infinite scroll,<br>but for knowledge.</h1>
+            <p class="animate delay-1">Browse Wikipedia articles in 10 Indian languages. Free. No ads. No login
+                required. ScrollGyan is a knowledge app designed for Indian users.</p>
+            <div class="cta-group animate delay-2">
+                <a href="#" class="cta-button">Download Free</a>
+            </div>
+        </section>
+
+        <section class="app-showcase animate delay-2">
+            <div class="phone-carousel">
+                <div class="phone-frame"><img src="Medium - 01 - Frame 1.jpg" alt="ScrollGyan Screenshot 1"></div>
+                <div class="phone-frame"><img src="Medium - 03 - Frame 1.jpg" alt="ScrollGyan Screenshot 2"></div>
+                <div class="phone-frame"><img src="Medium - 05 - Frame 1.jpg" alt="ScrollGyan Screenshot 3"></div>
+                <div class="phone-frame"><img src="Medium - 07 - Frame 1.jpg" alt="ScrollGyan Screenshot 4"></div>
+            </div>
+        </section>
+
+        <section id="how-it-works" class="grid-section">
+            <div class="section-header">
+                <span>The Experience</span>
+                <h2>How it works</h2>
+            </div>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <h3>Swipe to Discover</h3>
+                    <p>Launch the app, select your language, and start swiping. A new Wikipedia article appears with
+                        each swipe.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Deep History</h3>
+                    <p>Swipe down to return to what you already read. Your exploration journey is always preserved.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Bookmark for Later</h3>
+                    <p>Found something fascinating? Bookmark articles and read them later, even when you are offline.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="languages">
+            <div class="section-header">
+                <span>Your Language</span>
+                <h2>10 Indian Languages Supported</h2>
+            </div>
+            <div class="languages-list">
+                <span class="lang-tag">English</span>
+                <span class="lang-tag">Hindi</span>
+                <span class="lang-tag">Telugu</span>
+                <span class="lang-tag">Tamil</span>
+                <span class="lang-tag">Kannada</span>
+                <span class="lang-tag">Bengali</span>
+                <span class="lang-tag">Marathi</span>
+                <span class="lang-tag">Malayalam</span>
+                <span class="lang-tag">Gujarati</span>
+                <span class="lang-tag">Punjabi</span>
+            </div>
+        </section>
+
+        <section id="features" class="grid-section">
+            <div class="section-header">
+                <span>Built for You</span>
+                <h2>Features</h2>
+            </div>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <h3>Vertical Swipe Feed</h3>
+                    <p>Focus on one article at a time. No distractions, just high-quality content.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Offline Access</h3>
+                    <p>Read your bookmarked articles anytime, anywhere, without an internet connection.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Truly Free</h3>
+                    <p>No ads, no tracking, no data collection. Just pure knowledge at your fingertips.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Native Experience</h3>
+                    <p>Designed for Indian users who want to read knowledge in their native language effortlessly.</p>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <div class="footer-logo">ScrollGyan</div>
+            <p class="footer-desc">The world's largest free online encyclopedia, now in a feed designed for India.</p>
+            <div class="footer-links">
+                <a href="#how-it-works">How it works</a>
+                <a href="#features">Features</a>
+                <a href="javascript:void(0)" onclick="openPrivacy()">Privacy Policy</a>
+                <a href="mailto:kalvar93983@gmail.com">Contact</a>
+            </div>
+            <p class="copyright">© 2026 ScrollGyan. All articles are fetched from Wikipedia. No ads. No tracking.</p>
+        </footer>
+    </div>
+
+    <!-- Privacy Modal -->
+    <div id="privacy-modal">
+        <div class="close-modal" onclick="closePrivacy()">×</div>
+        <div class="modal-content">
+            <h1>Privacy Policy</h1>
+            <p style="margin: 2rem 0; color: #666;">Last updated: February 2026</p>
+            <div id="privacy-body">
+                <h3>Overview</h3>
+                <p>ScrollGyan is a free knowledge app that shows Wikipedia articles in Indian languages. We are
+                    committed to protecting your privacy.</p>
+                <br>
+                <h3>Data We Collect</h3>
+                <p>ScrollGyan does NOT collect any personal information.</p>
+                <ul style="margin: 1rem 0 1rem 1.5rem;">
+                    <li>No login or account required</li>
+                    <li>No name, email, or phone number collected</li>
+                    <li>No location data collected</li>
+                    <li>No usage tracking or analytics</li>
+                    <li>No third-party advertising</li>
+                </ul>
+                <br>
+                <h3>How it Works</h3>
+                <p>Articles are fetched from Wikipedia's public API in real time. Wikipedia's own privacy policy applies
+                    to those requests. Saved articles are stored locally on your device only. No data is sent to any
+                    server owned by ScrollGyan.</p>
+                <br>
+                <h3>Contact</h3>
+                <p>If you have any questions, contact us at: kalvar93983@gmail.com</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openPrivacy() {
+            document.getElementById('privacy-modal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closePrivacy() {
+            document.getElementById('privacy-modal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Animation on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.feature-item, .section-header, .lang-tag').forEach(el => observer.observe(el));
+    </script>
+</body>
+
+</html>
